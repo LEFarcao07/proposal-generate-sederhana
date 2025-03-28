@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Proposal Otomatis</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: '#judul, #subjudul, #nama_kelompok, #informasi_lain, #kata_pengantar, #latar_belakang, #visi, #misi, #tujuan',
+      plugins: 'bold italic underline',
+      toolbar: 'bold italic underline',
+      menubar: false,
+      height: 200,
+      setup: function (editor) {
+        editor.on('input', function () {
+          const content = editor.getContent();
+          localStorage.setItem(editor.id, content);
+        });
+
+        editor.on('init', function () {
+          const savedContent = localStorage.getItem(editor.id);
+          if (savedContent) {
+            editor.setContent(savedContent);
+          }
+        });
+      }
+    });
+
+    function clearStorage() {
+      localStorage.clear();
+      alert('Data tersimpan telah dihapus.');
+      location.reload();
+    }
+  </script>
+</head>
+<body>
+  <h1>Generator Proposal Otomatis</h1>
+  <form id="proposalForm" enctype="multipart/form-data">
+    <label for="judul">Judul: <span class="required">*</span></label>
+    <textarea id="judul" name="judul" required></textarea><br><br>
+
+    <label for="subjudul">Subjudul: <span class="required">*</span></label>
+    <textarea id="subjudul" name="subjudul" required></textarea><br><br>
+    
+    <label for="logo">Gambar/Logo: <span class="required">*</span></label>
+    <input type="file" id="logo" name="logo" accept="image/*" required>
+    <p id="fileError" style="color: red; display: none;">Format file tidak didukung.</p>
+    <br><br>
+    
+    <label for="nama_kelompok">Nama/Kelompok: <span class="required">*</span></label>
+    <textarea id="nama_kelompok" name="nama_kelompok" required></textarea><br><br>
+    
+    <label for="informasi_lain">Informasi Lain: <span class="required">*</span></label>
+    <textarea id="informasi_lain" name="informasi_lain" required></textarea><br><br>
+    
+    <label for="kata_pengantar">Kata Pengantar: <span class="required">*</span></label>
+    <textarea id="kata_pengantar" name="kata_pengantar" required></textarea><br><br>
+    
+    <label for="latar_belakang">Latar Belakang: <span class="required">*</span></label>
+    <textarea id="latar_belakang" name="latar_belakang" required></textarea><br><br>
+    
+    <label for="visi">Visi: <span class="required">*</span></label>
+    <textarea id="visi" name="visi" required></textarea><br><br>
+    
+    <label for="misi">Misi: <span class="required">*</span></label>
+    <textarea id="misi" name="misi" required></textarea><br><br>
+    
+    <label for="tujuan">Tujuan: <span class="required">*</span></label>
+    <textarea id="tujuan" name="tujuan" required></textarea><br><br>
+
+    <button onclick="window.location.href='/chat'" style="background-color: #3498db;">Pergi Ke Chat AI</button>
+    <button onclick="generateProposal()" style="margin-top: 10px; background-color: #34db71;">Generate Proposal</button>
+    <button onclick="clearStorage()" style="margin-top: 10px; background-color: #f33a3a;">Hapus Data Tersimpan</button>
+  </form>
+
+  <script>
+    function allowed_file(filename) {
+      const allowedExtensions = ['png', 'jpg', 'jpeg'];
+      const fileExtension = filename.split('.').pop().toLowerCase();
+      return allowedExtensions.includes(fileExtension);
+    }
+
+    document.getElementById('logo').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      const fileError = document.getElementById('fileError');
+
+      if (!file || !allowed_file(file.name)) {
+        fileError.style.display = 'block';
+        e.target.value = '';
+      } else {
+        fileError.style.display = 'none';
+      }
+    });
+
+    async function generateProposal() {
+      const form = document.getElementById('proposalForm');
+      const inputs = form.querySelectorAll('textarea, input[type="file"]');
+      let isValid = true;
+      let firstEmptyInput = null;
+
+      inputs.forEach(input => {
+        if (input.tagName === 'TEXTAREA') {
+          const editor = tinymce.get(input.id);
+          const content = editor ? editor.getContent() : input.value.trim();
+
+          if (!content) {
+            isValid = false;
+            input.style.borderColor = 'red';
+
+            if (!firstEmptyInput) {
+              firstEmptyInput = input;
+            }
+          } else {
+            input.style.borderColor = '';
+          }
+        } else if (input.type === 'file') {
+          if (!input.files || input.files.length === 0) {
+            isValid = false;
+            input.style.borderColor = 'red';
+
+            if (!firstEmptyInput) {
+              firstEmptyInput = input;
+            }
+          } else {
+            input.style.borderColor = '';
+          }
+        }
+      });
+
+      if (!isValid) {
+        alert('Harap isi semua field yang wajib diisi!');
+
+        if (firstEmptyInput) {
+          if (firstEmptyInput.tagName === 'TEXTAREA') {
+            const editor = tinymce.get(firstEmptyInput.id);
+            if (editor) {
+              editor.focus();
+            } else {
+              firstEmptyInput.focus();
+            }
+          } else if (firstEmptyInput.type === 'file') {
+            firstEmptyInput.style.borderColor = 'red';
+          }
+        }
+
+        return;
+      }
+
+      try {
+        const judul = tinymce.get('judul').getContent();
+        const subjudul = tinymce.get('subjudul').getContent();
+        const nama_kelompok = tinymce.get('nama_kelompok').getContent();
+        const informasi_lain = tinymce.get('informasi_lain').getContent();
+        const kata_pengantar = tinymce.get('kata_pengantar').getContent();
+        const latar_belakang = tinymce.get('latar_belakang').getContent();
+        const visi = tinymce.get('visi').getContent();
+        const misi = tinymce.get('misi').getContent();
+        const tujuan = tinymce.get('tujuan').getContent();
+
+        const formData = new FormData();
+        formData.append('judul', judul);
+        formData.append('subjudul', subjudul);
+        formData.append('nama_kelompok', nama_kelompok);
+        formData.append('informasi_lain', informasi_lain);
+        formData.append('kata_pengantar', kata_pengantar);
+        formData.append('latar_belakang', latar_belakang);
+        formData.append('visi', visi);
+        formData.append('misi', misi);
+        formData.append('tujuan', tujuan);
+
+        const logoFile = document.getElementById('logo').files[0];
+        formData.append('logo', logoFile);
+
+        const response = await fetch('/generate', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Terjadi kesalahan saat mengirim data ke server.');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'proposal.docx';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Terjadi kesalahan:', error);
+        alert('Terjadi kesalahan: ' + error.message);
+      }
+    }
+  </script>
+</body>
+</html>
