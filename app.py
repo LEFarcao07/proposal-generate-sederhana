@@ -29,13 +29,17 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/static/<path:filename>')
-def serve_static(filename):
-    return send_from_directory(os.getcwd(), filename)
+#@app.route('/static/<path:filename>')
+#def serve_static(filename):
+    #return send_from_directory(os.getcwd(), filename)
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/ping')
+def ping():
+    return "pong"
 
 @app.route('/generate', methods=['POST', 'OPTIONS'])
 def generate_docx():

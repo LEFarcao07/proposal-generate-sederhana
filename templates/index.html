@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate Proposal Otomatis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <h1>Generator Proposal Otomatis</h1>
+    <form id="proposalForm" enctype="multipart/form-data">
+      <!-- Judul -->
+      <label for="judul">Judul: <span class="required">*</span></label>
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="judul"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="judul"
+        ></div>
+      </div>
+      <input type="hidden" name="judul" id="judul-hidden" />
+
+      <!-- Subjudul -->
+      <label for="subjudul">Subjudul: <span class="required">*</span></label>
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="subjudul"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="subjudul"
+        ></div>
+      </div>
+      <input type="hidden" name="subjudul" id="subjudul-hidden" />
+
+      <!-- Logo -->
+      <label for="logo">Gambar/Logo: <span class="required">*</span></label>
+      <input type="file" id="logo" name="logo" accept="image/*" required />
+      <p id="fileError" class="error-message">Format file tidak didukung.</p>
+
+      <!-- Nama Kelompok -->
+      <label for="nama_kelompok"
+        >Nama/Kelompok: <span class="required">*</span></label
+      >
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="nama_kelompok"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="nama_kelompok"
+        ></div>
+      </div>
+      <input type="hidden" name="nama_kelompok" id="nama_kelompok-hidden" />
+
+      <!-- Informasi Lain -->
+      <label for="informasi_lain"
+        >Informasi Lain: <span class="required">*</span></label
+      >
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="informasi_lain"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="informasi_lain"
+        ></div>
+      </div>
+      <input type="hidden" name="informasi_lain" id="informasi_lain-hidden" />
+
+      <!-- Kata Pengantar -->
+      <label for="kata_pengantar"
+        >Kata Pengantar: <span class="required">*</span></label
+      >
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="kata_pengantar"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="kata_pengantar"
+        ></div>
+      </div>
+      <input type="hidden" name="kata_pengantar" id="kata_pengantar-hidden" />
+
+      <!-- Latar Belakang -->
+      <label for="latar_belakang"
+        >Latar Belakang: <span class="required">*</span></label
+      >
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="latar_belakang"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="latar_belakang"
+        ></div>
+      </div>
+      <input type="hidden" name="latar_belakang" id="latar_belakang-hidden" />
+
+      <!-- Visi -->
+      <label for="visi">Visi: <span class="required">*</span></label>
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="visi"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="visi"
+        ></div>
+      </div>
+      <input type="hidden" name="visi" id="visi-hidden" />
+
+      <!-- Misi -->
+      <label for="misi">Misi: <span class="required">*</span></label>
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="misi"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="misi"
+        ></div>
+      </div>
+      <input type="hidden" name="misi" id="misi-hidden" />
+
+      <!-- Tujuan -->
+      <label for="tujuan">Tujuan: <span class="required">*</span></label>
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            data-command="bold"
+            title="Bold"
+            aria-label="Bold"
+          >
+            <b>B</b>
+          </button>
+          <button
+            type="button"
+            data-command="italic"
+            title="Italic"
+            aria-label="Italic"
+          >
+            <i>I</i>
+          </button>
+          <button
+            type="button"
+            data-command="underline"
+            title="Underline"
+            aria-label="Underline"
+          >
+            <u>U</u>
+          </button>
+        </div>
+        <div
+          id="tujuan"
+          class="rich-text-editor"
+          contenteditable="true"
+          data-storage-key="tujuan"
+        ></div>
+      </div>
+      <input type="hidden" name="tujuan" id="tujuan-hidden" />
+
+      <div class="button-group">
+        <button type="button" onclick="handleGenerate()" class="btn-generate">
+          Generate Proposal
+        </button>
+        <button type="button" onclick="clearStorage()" class="btn-clear">
+          Hapus Data Tersimpan
+        </button>
+      </div>
+    </form>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
