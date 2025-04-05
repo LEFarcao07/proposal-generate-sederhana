@@ -382,4 +382,4 @@ def add_html_paragraph(doc, html, alignment=WD_ALIGN_PARAGRAPH.LEFT, font_size=P
         process_element(element)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=10000, host='0.0.0.0')
+    app.run(debug=True, port=3020, host='0.0.0.0')
