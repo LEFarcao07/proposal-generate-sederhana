@@ -43,7 +43,6 @@ This is the recommended structure for your document:
 To install the required libraries, run the following commands:
 
 ```markdown
-pip install mammoth
 pip install flask
 pip install python-docx
 pip install beautifulsoup4
